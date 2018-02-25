@@ -23,11 +23,19 @@ def get_image_example_data():
 			test[i][j] = int(content[(i + 9) * 1024 + j])			
 	return train, test
 
-def get_random_sample_data(n = 300):
-	train = np.zeros((n, 100))
+def sign(value):
+	if value > 0:
+		return 1.
+	elif value < 0:
+		return -1.
+	else:
+		return 0
+
+def get_random_sample_data(dim = 100, n = 300, bias = 0):
+	train = np.zeros((n, dim))
 	for i in range(n):
-		for j in range(100):
-			train[i][j] = random.randint(0, 1) * 2 - 1
+		for j in range(dim):
+			train[i][j] = sign(random.normalvariate(bias, 1))
 	return train
 	
 def get_decode_pattern(value):

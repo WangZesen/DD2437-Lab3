@@ -11,10 +11,19 @@ class network:
 		self._show_gap = show_gap
 		self._show_handle = show_handle
 		assert not (self._show_gap != None and self._show_handle == None)
-
 		if data != None:
 			assert isinstance(data, np.ndarray)
 			self.update_weight(data)
+
+	def lazy_update_weight(self, data):
+		assert isinstance(data, np.ndarray)
+		assert data.shape[0] == self.dim
+		assert self._set_weight
+		# self.w = np.zeros((self.dim, self.dim))
+		vector_data = np.reshape(data, (1, self.dim))
+		for i in range(data.shape[0]):
+			self.w = self.w + np.dot(vector_data.T, vector_data) / self.dim
+		
 
 	def update_weight(self, data):
 		assert isinstance(data, np.ndarray)
@@ -26,6 +35,10 @@ class network:
 		self._set_weight = True
 		if self._verbose:
 			print (self.w)
+
+	def update_weight_zero(self):
+		self.w = np.zeros((self.dim, self.dim))
+		self._set_weight = True
 
 	def update_weight_normal(self):
 		self.w = np.zeros((self.dim, self.dim))
@@ -117,5 +130,7 @@ class network:
 				new_state[index[j]] = self._sign_scala(np.dot(new_state, self.w[index[j]]))
 			if np.array_equal(new_state, old_state):
 				return i, old_state
+
 		print ("[Warning] Can't Converge in {} Iterations".format(self._max_iter))
+
 		return -1, new_state

@@ -127,6 +127,29 @@ elif problem_label == "3.4":
 elif problem_label == "3.5.1":
 	train, test = data.get_image_example_data()
 	network = net.network(train.shape[1], sync = True)
+	for cap in range(2, train.shape[0]):
+		network.update_weight(train[0:cap])
+		exp_time = 10
+		x = []
+		y = []
+		for i in range(50):
+			x.append(i * 2)
+			count = 0
+			for j in range(exp_time):
+				for k in range(cap):
+					noise_train = data.flip_pattern(train[k], int(train.shape[1] / 100 * i * 2))
+					num_iter, final_state = network.update_state(noise_train)
+					if np.array_equal(final_state, train[k]):
+						count += 1
+			y.append(count / exp_time / cap)
+		image.show_plot(x, y, "noise rate", "recover rate", "store {} patterns".format(cap))
+
+elif problem_label == "3.5.2":
+	randomTrain = data.get_random_sample_data(dim = 1024, n = 10)
+	train, test = data.get_image_example_data()
+	train[3:10] = randomTrain[0:6]
+	network = net.network(train.shape[1], sync = True)
+
 	for cap in range(3, train.shape[0]):
 		network.update_weight(train[0:cap])
 		exp_time = 10
@@ -141,11 +164,41 @@ elif problem_label == "3.5.1":
 					num_iter, final_state = network.update_state(noise_train)
 					if np.array_equal(final_state, train[k]):
 						count += 1
-			y.append(count / exp_time / 3)
-		image.show_plot(x, y, "noise rate", "recover rate", "store {} patterns".format(cap))
+			y.append(count / exp_time / cap)
+		image.show_plot(x, y, "noise rate", "recover rate", "store {} patterns ({} at 0 noise)".format(cap, y[0]))
 
-elif problem_label == "3.5.2":
-	pass
+elif problem_label == "3.5.4":
+	train = data.get_random_sample_data(dim = 100, n = 300)
+	network = net.network(train.shape[1], sync = True)
+	network.update_weight_zero()
+	x = []
+	y = []
+	for cap in range(1, train.shape[0]):
+		network.lazy_update_weight(train[cap - 1])
+		x.append(cap)
+		count = 0
+		for i in range(cap):
+			if network.stationary_point(train[i]):
+				count += 1
+		y.append(count / cap)
+	image.show_plot(x, y, "# Patterns Stored", "Stability Rate", "100-unit Network")
+
+elif problem_label == "3.5.5":
+	train = data.get_random_sample_data(dim = 100, n = 300)
+	network = net.network(train.shape[1], sync = True)
+	network.update_weight_zero()
+	x = []
+	y = []
+	for cap in range(1, train.shape[0]):
+		network.lazy_update_weight(train[cap - 1])
+		x.append(cap)
+		count = 0
+		for i in range(cap):
+			num_iter, final_state = network.update_state(data.flip_pattern(train[i], 3))
+			if np.array_equal(final_state, train[i]):
+				count += 1
+		y.append(count / cap)
+	image.show_plot(x, y, "# Patterns Stored", "Stability Rate", "100-unit Network")
 
 else:
 	print ("Invalid Problem Label!")
