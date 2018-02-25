@@ -109,19 +109,43 @@ elif problem_label == "3.4":
 	train, test = data.get_image_example_data()
 	network = net.network(train.shape[1], sync = True)
 	network.update_weight(train[0:3])
-	exp_time = 50
+	exp_time = 10
 	x = []
 	y = []
 	for i in range(50):
 		x.append(i * 2)
 		count = 0
 		for j in range(exp_time):
-			noise_train = data.flip_pattern(train[0], int(train.shape[1] / 100 * i * 2))
-			num_iter, final_state = network.update_state(noise_train)
-			if np.array_equal(final_state, train[0]):
-				count += 1
-		y.append(count / exp_time)
-	image.show_plot(x, y)
+			for k in range(3):
+				noise_train = data.flip_pattern(train[k], int(train.shape[1] / 100 * i * 2))
+				num_iter, final_state = network.update_state(noise_train)
+				if np.array_equal(final_state, train[k]):
+					count += 1
+		y.append(count / exp_time / 3)
+	image.show_plot(x, y, "noise rate", "recover rate")
+
+elif problem_label == "3.5.1":
+	train, test = data.get_image_example_data()
+	network = net.network(train.shape[1], sync = True)
+	for cap in range(3, train.shape[0]):
+		network.update_weight(train[0:cap])
+		exp_time = 10
+		x = []
+		y = []
+		for i in range(50):
+			x.append(i * 2)
+			count = 0
+			for j in range(exp_time):
+				for k in range(cap):
+					noise_train = data.flip_pattern(train[k], int(train.shape[1] / 100 * i * 2))
+					num_iter, final_state = network.update_state(noise_train)
+					if np.array_equal(final_state, train[k]):
+						count += 1
+			y.append(count / exp_time / 3)
+		image.show_plot(x, y, "noise rate", "recover rate", "store {} patterns".format(cap))
+
+elif problem_label == "3.5.2":
+	pass
 
 else:
 	print ("Invalid Problem Label!")
