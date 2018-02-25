@@ -28,3 +28,9 @@ def get_decode_pattern(value):
 		pattern[i] = 1 if value % 2 else -1
 		value = value // 2
 	return pattern
+
+def flip_pattern(pattern, n):
+	index = random.sample(range(pattern.shape[0]), n)
+	for i in range(n):
+		pattern[index[i]] = -1 * pattern[index[i]]
+	return pattern

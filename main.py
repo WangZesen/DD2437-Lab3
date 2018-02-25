@@ -44,7 +44,63 @@ if problem_label == "3.1.3":
 	print ("[Test case]".rjust(13), test)
 	print ("[Test result]".rjust(13), final_state)
 
+if problem_label == "3.2": # show all patterns
+	train, test = data.get_image_example_data()
+	for i in range(train.shape[0]):
+		image.show_pattern(train[i])
+	for i in range(test.shape[0]):
+		image.show_pattern(test[i])
+
 if problem_label == "3.2.1":
 	train, test = data.get_image_example_data()
 	network = net.network(train.shape[1], sync = True)
 	network.update_weight(train)
+	for i in range(test.shape[0]):
+		image.show_pattern(test[i])
+		num_iter, final_state = network.update_state(test[i])
+		image.show_pattern(final_state)
+
+if problem_label == "3.2.2":
+	train, test = data.get_image_example_data()
+	network = net.network(train.shape[1], sync = False, show_gap = 1, show_handle = image.show_pattern)
+	network.update_weight(train)
+	for i in range(test.shape[0]):
+		num_iter, final_state = network.update_state(test[i])
+
+if problem_label == "3.3.1":
+	train, test = data.get_image_example_data()
+	network = net.network(train.shape[1])
+	network.update_weight(train)
+	for i in range(train.shape[0]):
+		print ("[Case {}]".format(i), network.get_energy(train[i]))
+
+if problem_label == "3.3.2":
+	train, test = data.get_image_example_data()
+	network = net.network(train.shape[1])
+	network.update_weight(train)
+	for i in range(test.shape[0]):
+		print ("[Case {}]".format(i), network.get_energy(test[i]))
+
+if problem_label == "3.3.3":
+	train, test = data.get_image_example_data()
+	network = net.network(train.shape[1], sync = False, show_gap = 1, show_handle = image.show_pattern)
+	network.update_weight(train)
+	for i in range(test.shape[0]):
+		print ("[Case {}]".format(i))
+		num_iter, final_state = network.update_state(test[i])
+
+if problem_label == "3.3.4":
+	train, test = data.get_image_example_data()
+	network = net.network(train.shape[1], sync = False, show_gap = 50, show_handle = image.show_pattern)
+	network.update_weight_normal()
+	for i in range(test.shape[0]):
+		print ("[Case {}]".format(i))
+		num_iter, final_state = network.update_state(test[i])
+
+if problem_label == "3.3.5":
+	train, test = data.get_image_example_data()
+	network = net.network(train.shape[1], sync = False, show_gap = 5, show_handle = image.show_pattern)
+	network.update_weight_symmetry()
+	for i in range(test.shape[0]):
+		print ("[Case {}]".format(i))
+		num_iter, final_state = network.update_state(test[i])
