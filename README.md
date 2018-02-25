@@ -4,7 +4,7 @@ DD2437 Artificial Neural Network Lab 3
 ## Run
 `python main.py <Problem Label>`
 
-<Problem Label> can be "2.2", "3.1.1", etc.
+`<Problem Label>` can be "2.2", "3.1.1", etc.
 
 ## Todo
 - [ ] 3.5.6
