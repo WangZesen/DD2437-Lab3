@@ -200,5 +200,56 @@ elif problem_label == "3.5.5":
 		y.append(count / cap)
 	image.show_plot(x, y, "# Patterns Stored", "Stability Rate", "100-unit Network")
 
+elif problem_label == "3.5.6":
+	pass
+
+elif problem_label == "3.5.7":
+	pass
+
+elif problem_label == "3.6.1":
+	activity = 0.1
+	train = data.get_random_sample_data_activity(dim = 100, n = 40, activity = activity)
+	x = []
+	y = []	
+	for bias_iter in range(251):
+		bias = -2 + 0.02 * bias_iter
+		network = net.network(train.shape[1], activity = activity, bias = bias)
+		network.update_weight_zero()
+		x.append(bias)
+		for cap in range(1, train.shape[0] + 1):
+			network.lazy_update_weight(train[cap - 1])
+			count = 0
+			for i in range(cap):
+				if network.binary_stationary_point(train[i]):
+					count += 1
+			if count / cap < 1.0:
+				y.append(cap - 1)
+				break
+		# y.append(count / cap)
+	image.show_plot(x, y, "Bias", "Maximum Storage", "100-unit Network with {} activity".format(activity))
+
+elif problem_label == "3.6.2":
+	activity = 0.05
+	train = data.get_random_sample_data_activity(dim = 100, n = 40, activity = activity)
+	x = []
+	y = []	
+	for bias_iter in range(201):
+		bias = -1 + 0.02 * bias_iter
+		network = net.network(train.shape[1], activity = activity, bias = bias)
+		network.update_weight_zero()
+		x.append(bias)
+		for cap in range(1, train.shape[0] + 1):
+			network.lazy_update_weight(train[cap - 1])
+			count = 0
+			for i in range(cap):
+				if network.binary_stationary_point(train[i]):
+					count += 1
+			if count / cap < 1.0:
+				y.append(cap - 1)
+				break
+		# y.append(count / cap)
+	image.show_plot(x, y, "Bias", "Maximum Storage", "100-unit Network with {} activity".format(activity))
+
+
 else:
 	print ("Invalid Problem Label!")

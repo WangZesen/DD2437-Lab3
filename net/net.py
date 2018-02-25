@@ -2,9 +2,12 @@ import numpy as np
 import copy, random
 
 class network:
-	def __init__(self, dim, sync = True, data = None, verbose = False, show_gap = None, show_handle = None):
+	def __init__(self, dim, sync = True, data = None, verbose = False, show_gap = None,
+				show_handle = None, activity = 0, bias = 0):
 		self.dim = dim
 		self.sync = sync
+		self.activity = activity
+		self.bias = bias
 		self._set_weight = False
 		self._verbose = verbose
 		self._max_iter = 1000
@@ -22,7 +25,7 @@ class network:
 		# self.w = np.zeros((self.dim, self.dim))
 		vector_data = np.reshape(data, (1, self.dim))
 		for i in range(data.shape[0]):
-			self.w = self.w + np.dot(vector_data.T, vector_data) / self.dim
+			self.w = self.w + np.dot(vector_data.T - self.activity, vector_data - self.activity) / self.dim
 		
 
 	def update_weight(self, data):
@@ -30,7 +33,7 @@ class network:
 		assert data.shape[1] == self.dim
 		self.w = np.zeros((self.dim, self.dim))
 		for i in range(data.shape[0]):
-			self.w = self.w + np.dot(data[i:i + 1].T, data[i:i + 1])
+			self.w = self.w + np.dot(data[i:i + 1].T - self.activity, data[i:i + 1] - self.activity)
 		self.w = self.w / self.dim
 		self._set_weight = True
 		if self._verbose:
@@ -75,6 +78,23 @@ class network:
 		vector_state = np.reshape(init_state, (1, init_state.shape[0]))
 		energy_matrix = np.multiply(self.w, np.dot(vector_state.T, vector_state))
 		return -np.sum(np.sum(energy_matrix, axis = 1))
+
+	def binary_stationary_point(self, init_state):
+		if np.array_equal(self._sign_binary_list(np.dot(init_state, self.w) - self.bias), init_state):
+			return True
+		else:
+			return False
+
+	def _sign_binary_scala(self, value):
+		if value > 0:
+			return 1.
+		else:
+			return 0.
+
+	def _sign_binary_list(self, state):
+		for i in range(self.dim):
+			state[i] = self._sign_binary_scala(state[i])
+		return state
 
 	def _sign_scala(self, value):
 		if value > 0:

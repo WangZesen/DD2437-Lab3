@@ -37,7 +37,14 @@ def get_random_sample_data(dim = 100, n = 300, bias = 0):
 		for j in range(dim):
 			train[i][j] = sign(random.normalvariate(bias, 1))
 	return train
-	
+
+def get_random_sample_data_activity(dim = 100, n = 300, activity = 0.1):
+	train = np.zeros((n, dim))
+	for i in range(n):
+		for j in range(dim):
+			train[i][j] = 1. if random.uniform(0, 1) < activity else 0.
+	return train
+
 def get_decode_pattern(value):
 	pattern = np.zeros((8,))
 	for i in range(8):
