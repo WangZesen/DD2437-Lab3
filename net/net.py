@@ -10,6 +10,8 @@ class network:
 		self._max_iter = 1000
 		self._show_gap = show_gap
 		self._show_handle = show_handle
+		assert not (self._show_gap != None and self._show_handle == None)
+
 		if data != None:
 			assert isinstance(data, np.ndarray)
 			self.update_weight(data)

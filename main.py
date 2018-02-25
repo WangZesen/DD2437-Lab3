@@ -13,7 +13,7 @@ if problem_label == "2.2":
 	for i in range(train.shape[0]):
 		print ("Stationary Point:", network.stationary_point(train[0]))
 
-if problem_label == "3.1.1":
+elif problem_label == "3.1.1":
 	train, test = data.get_toy_example_data()
 	network = net.network(train.shape[1], sync = True)
 	network.update_weight(train)
@@ -23,7 +23,7 @@ if problem_label == "3.1.1":
 		print ("[Test result {}]".format(i + 1).rjust(16), final_state)
 		print ("[Ground truth {}]".format(i + 1).rjust(16), train[i])
 
-if problem_label == "3.1.2":
+elif problem_label == "3.1.2":
 	train, test = data.get_toy_example_data()
 	network = net.network(train.shape[1], sync = True)
 	network.update_weight(train)
@@ -35,7 +35,7 @@ if problem_label == "3.1.2":
 			print (cur_state)
 	print ("# Attractors:", count)
 
-if problem_label == "3.1.3":
+elif problem_label == "3.1.3":
 	train, test = data.get_toy_example_data()
 	network = net.network(train.shape[1], sync = True)
 	network.update_weight(train)
@@ -44,14 +44,14 @@ if problem_label == "3.1.3":
 	print ("[Test case]".rjust(13), test)
 	print ("[Test result]".rjust(13), final_state)
 
-if problem_label == "3.2": # show all patterns
+elif problem_label == "3.2": # show all patterns
 	train, test = data.get_image_example_data()
 	for i in range(train.shape[0]):
 		image.show_pattern(train[i])
 	for i in range(test.shape[0]):
 		image.show_pattern(test[i])
 
-if problem_label == "3.2.1":
+elif problem_label == "3.2.1":
 	train, test = data.get_image_example_data()
 	network = net.network(train.shape[1], sync = True)
 	network.update_weight(train)
@@ -60,28 +60,28 @@ if problem_label == "3.2.1":
 		num_iter, final_state = network.update_state(test[i])
 		image.show_pattern(final_state)
 
-if problem_label == "3.2.2":
+elif problem_label == "3.2.2":
 	train, test = data.get_image_example_data()
 	network = net.network(train.shape[1], sync = False, show_gap = 1, show_handle = image.show_pattern)
 	network.update_weight(train)
 	for i in range(test.shape[0]):
 		num_iter, final_state = network.update_state(test[i])
 
-if problem_label == "3.3.1":
+elif problem_label == "3.3.1":
 	train, test = data.get_image_example_data()
 	network = net.network(train.shape[1])
 	network.update_weight(train)
 	for i in range(train.shape[0]):
 		print ("[Case {}]".format(i), network.get_energy(train[i]))
 
-if problem_label == "3.3.2":
+elif problem_label == "3.3.2":
 	train, test = data.get_image_example_data()
 	network = net.network(train.shape[1])
 	network.update_weight(train)
 	for i in range(test.shape[0]):
 		print ("[Case {}]".format(i), network.get_energy(test[i]))
 
-if problem_label == "3.3.3":
+elif problem_label == "3.3.3":
 	train, test = data.get_image_example_data()
 	network = net.network(train.shape[1], sync = False, show_gap = 1, show_handle = image.show_pattern)
 	network.update_weight(train)
@@ -89,7 +89,7 @@ if problem_label == "3.3.3":
 		print ("[Case {}]".format(i))
 		num_iter, final_state = network.update_state(test[i])
 
-if problem_label == "3.3.4":
+elif problem_label == "3.3.4":
 	train, test = data.get_image_example_data()
 	network = net.network(train.shape[1], sync = False, show_gap = 50, show_handle = image.show_pattern)
 	network.update_weight_normal()
@@ -97,10 +97,31 @@ if problem_label == "3.3.4":
 		print ("[Case {}]".format(i))
 		num_iter, final_state = network.update_state(test[i])
 
-if problem_label == "3.3.5":
+elif problem_label == "3.3.5":
 	train, test = data.get_image_example_data()
 	network = net.network(train.shape[1], sync = False, show_gap = 5, show_handle = image.show_pattern)
 	network.update_weight_symmetry()
 	for i in range(test.shape[0]):
 		print ("[Case {}]".format(i))
 		num_iter, final_state = network.update_state(test[i])
+
+elif problem_label == "3.4":
+	train, test = data.get_image_example_data()
+	network = net.network(train.shape[1], sync = True)
+	network.update_weight(train[0:3])
+	exp_time = 50
+	x = []
+	y = []
+	for i in range(50):
+		x.append(i * 2)
+		count = 0
+		for j in range(exp_time):
+			noise_train = data.flip_pattern(train[0], int(train.shape[1] / 100 * i * 2))
+			num_iter, final_state = network.update_state(noise_train)
+			if np.array_equal(final_state, train[0]):
+				count += 1
+		y.append(count / exp_time)
+	image.show_plot(x, y)
+
+else:
+	print ("Invalid Problem Label!")

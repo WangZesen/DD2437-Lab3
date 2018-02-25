@@ -9,3 +9,7 @@ def show_pattern(pattern, iter = None):
 		plt.show()
 	except:
 		print (pattern)
+
+def show_plot(x, y):
+	plt.plot(x, y)
+	plt.show()

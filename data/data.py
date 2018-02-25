@@ -1,4 +1,5 @@
 import numpy as np
+import copy, random
 
 def get_toy_example_data():
 	stored_partterns = [[-1., -1., 1., -1., 1., -1., -1., 1.],
@@ -30,7 +31,8 @@ def get_decode_pattern(value):
 	return pattern
 
 def flip_pattern(pattern, n):
+	new_pattern = copy.deepcopy(pattern)
 	index = random.sample(range(pattern.shape[0]), n)
 	for i in range(n):
-		pattern[index[i]] = -1 * pattern[index[i]]
-	return pattern
+		new_pattern[index[i]] = -1 * new_pattern[index[i]]
+	return new_pattern
