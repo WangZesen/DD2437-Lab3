@@ -7,6 +7,8 @@ def show_pattern(pattern, iter = None):
 		img = np.reshape(pattern, (32, 32)).tolist()
 		plt.imshow(img)
 		plt.show()
+	except KeyboardInterrupt:
+		raise (KeyboardInterrupt())
 	except:
 		print (pattern)
 

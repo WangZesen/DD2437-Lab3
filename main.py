@@ -54,15 +54,15 @@ elif problem_label == "3.2": # show all patterns
 elif problem_label == "3.2.1":
 	train, test = data.get_image_example_data()
 	network = net.network(train.shape[1], sync = True)
+	train = train[0:3]
 	network.update_weight(train)
-	for i in range(test.shape[0]):
-		image.show_pattern(test[i])
-		num_iter, final_state = network.update_state(test[i])
-		image.show_pattern(final_state)
+	for i in range(train.shape[0]):
+		print ("[Case {}]".format(i), network.stationary_point(train[i]))
 
 elif problem_label == "3.2.2":
 	train, test = data.get_image_example_data()
-	network = net.network(train.shape[1], sync = False, show_gap = 1, show_handle = image.show_pattern)
+	network = net.network(train.shape[1], sync = False, show_gap = 128, show_handle = image.show_pattern)
+	train = train[0:3]
 	network.update_weight(train)
 	for i in range(test.shape[0]):
 		num_iter, final_state = network.update_state(test[i])
@@ -70,6 +70,7 @@ elif problem_label == "3.2.2":
 elif problem_label == "3.3.1":
 	train, test = data.get_image_example_data()
 	network = net.network(train.shape[1])
+	train = train[0:3]
 	network.update_weight(train)
 	for i in range(train.shape[0]):
 		print ("[Case {}]".format(i), network.get_energy(train[i]))
@@ -77,13 +78,15 @@ elif problem_label == "3.3.1":
 elif problem_label == "3.3.2":
 	train, test = data.get_image_example_data()
 	network = net.network(train.shape[1])
+	train = train[0:3]
 	network.update_weight(train)
 	for i in range(test.shape[0]):
 		print ("[Case {}]".format(i), network.get_energy(test[i]))
 
 elif problem_label == "3.3.3":
 	train, test = data.get_image_example_data()
-	network = net.network(train.shape[1], sync = False, show_gap = 1, show_handle = image.show_pattern)
+	network = net.network(train.shape[1], sync = False, show_gap = 128, show_handle = image.show_pattern)
+	train = train[0:3]
 	network.update_weight(train)
 	for i in range(test.shape[0]):
 		print ("[Case {}]".format(i))

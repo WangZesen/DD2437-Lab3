@@ -143,11 +143,11 @@ class network:
 		for i in range(self._max_iter):
 			old_state = copy.deepcopy(new_state)
 			index = random.sample(range(self.dim), self.dim)
-			if (self._show_gap != None) and (i % self._show_gap == 0):
-				print ("Energy = {}".format(self.get_energy(new_state)))
-				self._show_handle(new_state)
 			for j in range(self.dim):
 				new_state[index[j]] = self._sign_scala(np.dot(new_state, self.w[index[j]]))
+				if (self._show_gap != None) and (j % self._show_gap == 0):
+					print ("Energy = {}".format(self.get_energy(new_state)))
+					self._show_handle(new_state)
 			if np.array_equal(new_state, old_state):
 				return i, old_state
 
