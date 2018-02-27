@@ -94,7 +94,7 @@ elif problem_label == "3.3.3":
 
 elif problem_label == "3.3.4":
 	train, test = data.get_image_example_data()
-	network = net.network(train.shape[1], sync = False, show_gap = 50, show_handle = image.show_pattern)
+	network = net.network(train.shape[1], sync = False, show_gap = 128, show_handle = image.show_pattern, show_delay = 100)
 	network.update_weight_normal()
 	for i in range(test.shape[0]):
 		print ("[Case {}]".format(i))
@@ -102,7 +102,7 @@ elif problem_label == "3.3.4":
 
 elif problem_label == "3.3.5":
 	train, test = data.get_image_example_data()
-	network = net.network(train.shape[1], sync = False, show_gap = 5, show_handle = image.show_pattern)
+	network = net.network(train.shape[1], sync = False, show_gap = 128, show_handle = image.show_pattern)
 	network.update_weight_symmetry()
 	for i in range(test.shape[0]):
 		print ("[Case {}]".format(i))

@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import time
 
 def show_pattern(pattern, iter = None):
 	assert isinstance(pattern, np.ndarray)
@@ -12,7 +13,7 @@ def show_pattern(pattern, iter = None):
 	except:
 		print (pattern)
 
-def show_plot(x, y, x_label = None, y_label = None, title = None):
+def show_plot(x, y, x_label = None, y_label = None, title = None, show_delay = None):
 	assert len(x) == len(y)
 	if x_label != None:
 		plt.xlabel(x_label)

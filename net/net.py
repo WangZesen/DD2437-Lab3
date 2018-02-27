@@ -3,7 +3,7 @@ import copy, random
 
 class network:
 	def __init__(self, dim, sync = True, data = None, verbose = False, show_gap = None,
-				show_handle = None, activity = 0, bias = 0):
+				show_handle = None, show_delay = None, activity = 0, bias = 0):
 		self.dim = dim
 		self.sync = sync
 		self.activity = activity
@@ -13,10 +13,16 @@ class network:
 		self._max_iter = 1000
 		self._show_gap = show_gap
 		self._show_handle = show_handle
+		self._trace = [[], []]
+		self._show_delay = show_delay
 		assert not (self._show_gap != None and self._show_handle == None)
 		if data != None:
 			assert isinstance(data, np.ndarray)
 			self.update_weight(data)
+
+	@property
+	def trace(self):
+		return self._trace
 
 	def lazy_update_weight(self, data):
 		assert isinstance(data, np.ndarray)
@@ -139,18 +145,22 @@ class network:
 		return -1, new_state
 
 	def _unsync_update_state(self, init_state):
+		show_count = 0
+		self._trace = [[], []]
 		new_state = copy.deepcopy(init_state)
 		for i in range(self._max_iter):
 			old_state = copy.deepcopy(new_state)
 			index = random.sample(range(self.dim), self.dim)
 			for j in range(self.dim):
 				new_state[index[j]] = self._sign_scala(np.dot(new_state, self.w[index[j]]))
-				if (self._show_gap != None) and (j % self._show_gap == 0):
+				if (self._show_gap != None) and (show_count % self._show_gap == 0):
+					self._trace[0].append(show_count)
+					self._trace[1].append(self.get_energy(new_state))
 					print ("Energy = {}".format(self.get_energy(new_state)))
-					self._show_handle(new_state)
+					self._show_handle(new_state, self._show_delay)
+				show_count += 1
 			if np.array_equal(new_state, old_state):
 				return i, old_state
-
+				
 		print ("[Warning] Can't Converge in {} Iterations".format(self._max_iter))
-
 		return -1, new_state
