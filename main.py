@@ -204,11 +204,39 @@ elif problem_label == "3.5.5":
 	image.show_plot(x, y, "# Patterns Stored", "Stability Rate", "100-unit Network")
 
 elif problem_label == "3.5.6":
-	pass
+	train = data.get_random_sample_data(dim = 100, n = 300)
+	network = net.network(train.shape[1], sync = True, diagonal = 0)
+	network.update_weight_zero()
+	x = []
+	y = []
+	for cap in range(1, train.shape[0]):
+		network.lazy_update_weight(train[cap - 1])
+		x.append(cap)
+		count = 0
+		for i in range(cap):
+			num_iter, final_state = network.update_state(data.flip_pattern(train[i], 3))
+			if np.array_equal(final_state, train[i]):
+				count += 1
+		y.append(count / cap)
+	image.show_plot(x, y, "# Patterns Stored", "Stability Rate", "100-unit Network")
 
 elif problem_label == "3.5.7":
-	pass
-
+	train = data.get_random_sample_data(dim = 100, n = 300, bias = 0.5)
+	network = net.network(train.shape[1], sync = True, diagonal = 0)
+	network.update_weight_zero()
+	x = []
+	y = []
+	for cap in range(1, train.shape[0]):
+		network.lazy_update_weight(train[cap - 1])
+		x.append(cap)
+		count = 0
+		for i in range(cap):
+			num_iter, final_state = network.update_state(data.flip_pattern(train[i], 3))
+			if np.array_equal(final_state, train[i]):
+				count += 1
+		y.append(count / cap)
+	image.show_plot(x, y, "# Patterns Stored", "Stability Rate", "100-unit Network")
+	
 elif problem_label == "3.6.1":
 	activity = 0.1
 	train = data.get_random_sample_data_activity(dim = 100, n = 40, activity = activity)

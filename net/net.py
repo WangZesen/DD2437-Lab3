@@ -3,7 +3,8 @@ import copy, random
 
 class network:
 	def __init__(self, dim, sync = True, data = None, verbose = False, show_gap = None,
-				show_handle = None, show_delay = None, activity = 0, bias = 0):
+				show_handle = None, show_delay = None, activity = 0, bias = 0,
+				diagonal = 1):
 		self.dim = dim
 		self.sync = sync
 		self.activity = activity
@@ -14,6 +15,7 @@ class network:
 		self._show_gap = show_gap
 		self._show_handle = show_handle
 		self._trace = [[], []]
+		self._diagonal = diagonal
 		self._show_delay = show_delay
 		assert not (self._show_gap != None and self._show_handle == None)
 		if data != None:
@@ -41,6 +43,8 @@ class network:
 		for i in range(data.shape[0]):
 			self.w = self.w + np.dot(data[i:i + 1].T - self.activity, data[i:i + 1] - self.activity)
 		self.w = self.w / self.dim
+		for i in range(self.dim):
+			self.w[i][i] *= self._diagonal
 		self._set_weight = True
 		if self._verbose:
 			print (self.w)
