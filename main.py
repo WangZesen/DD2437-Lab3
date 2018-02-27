@@ -242,7 +242,7 @@ elif problem_label == "3.6.1":
 	train = data.get_random_sample_data_activity(dim = 100, n = 40, activity = activity)
 	x = []
 	y = []	
-	for bias_iter in range(251):
+	for bias_iter in range(601):
 		bias = -2 + 0.02 * bias_iter
 		network = net.network(train.shape[1], activity = activity, bias = bias)
 		network.update_weight_zero()
@@ -260,11 +260,11 @@ elif problem_label == "3.6.1":
 	image.show_plot(x, y, "Bias", "Maximum Storage", "100-unit Network with {} activity".format(activity))
 
 elif problem_label == "3.6.2":
-	activity = 0.05
-	train = data.get_random_sample_data_activity(dim = 100, n = 40, activity = activity)
+	activity = 0.01
+	train = data.get_random_sample_data_activity(dim = 100, n = 100, activity = activity)
 	x = []
 	y = []	
-	for bias_iter in range(201):
+	for bias_iter in range(301):
 		bias = -1 + 0.02 * bias_iter
 		network = net.network(train.shape[1], activity = activity, bias = bias)
 		network.update_weight_zero()
