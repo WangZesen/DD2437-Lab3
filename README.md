@@ -8,3 +8,5 @@ DD2437 Artificial Neural Network Lab 3
 
 ## Report
 https://docs.google.com/document/d/1lDvO8Kb89WIknrph0GkliPWg3HiW4v0bkNgAmGuUJ3c/edit?usp=sharing
+
+- [ ] 222
